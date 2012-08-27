@@ -1,0 +1,40 @@
+--- sccs2git-r	Mon Jun  2 19:52:49 2008
++++ sccs2git-r-noignore	Mon Aug 27 17:15:05 2012
+@@ -1,4 +1,4 @@
+-#!/pro/bin/perl
++#!/usr/bin/perl
+ 
+ # This is the recursive version of sccs2git
+ # Combining all SCCS repos to one single git repo
+@@ -40,10 +40,11 @@ my $mark;
+ 
+ # use a best guess at user, hostname, etc.  FIXME: add authors map :)
+ use Time::Local;
+-my $domain = "procura.nl";
++my $domain = "ucbvax.Berkeley.EDU";
+ my %tzoffset;
+ my $tzoffset = sub {
+     my $offset_s = timegm (localtime ($_[0])) - $_[0];
++    $offset_s = 0 - 800;
+     $tzoffset{$offset_s} ||= ( $offset_s >= 0 ? "+" : "-" )
+ 	. sprintf "%.4d", abs $offset_s;
+     };
+@@ -91,7 +92,7 @@ foreach my $c (sort keys %sccs) {
+ 
+     print { $gfi } "commit ", $branchname, "\n";
+     print { $gfi } "committer ", $delta{committer}, " <",
+-	    ($delta{committer}, "@", $domain, "> ", $delta{stamp},
++	    ($delta{committer}, "@", $domain, "> ", $delta{stamp} + 64800,
+ 	     " ", $tzoffset->($delta{stamp}), "\n");
+ 
+     # tradition is to save all potentially useful but
+@@ -153,9 +154,6 @@ udir
+ EOG
+ 
+ close $gi;
+-
+-system "git", "add", ".gitignore";
+-system "git", "commit", "-m", "Add default ignore list";
+ 
+ @fail and print STDERR join "\n    ",
+     "The following files could not be converted and were skipped:", @fail, "\r";

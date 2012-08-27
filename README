@@ -1,0 +1,19 @@
+This is a bunch of notes and patches on converting the CSRG SCCS
+to a git repo for ease of browsing.
+
+- Obtain CSRG Archive CD set from http://www.mckusick.com/csrg/
+- Install VCS-SCCS from CPAN (http://search.cpan.org/dist/VCS-SCCS/)
+- apply SCCS-fix.patch to SCCS tree copied off CD 4
+- run sccs2git-r-noignore from the top level of the sccs tree
+
+sccs2git-r-noignore is one of the examples from VCS-SCCS-0.20
+- modified so the timestamps match the sccs logs
+- modified to not create a .gitignore
+- modified to have a default domain of ucbvax.Berkeley.EDU
+it has the same license as the rest of VCS-SCCS:
+
+COPYRIGHT AND LICENSE
+    Copyright (C) 2007-2011 H.Merijn Brand
+
+    This library is free software; you can redistribute it and/or modify
+    it under the same terms as Perl itself. 

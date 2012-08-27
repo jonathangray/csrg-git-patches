@@ -1,0 +1,120 @@
+diff -uprw csrg-orig/sys/kern/SCCS/s.kern_clock.c csrg/sys/kern/SCCS/s.kern_clock.c
+--- csrg-orig/sys/kern/SCCS/s.kern_clock.c	Fri Jan 21 21:17:51 1994
++++ csrg/sys/kern/SCCS/s.kern_clock.c	Tue Jul 31 18:02:37 2012
+@@ -1,4 +1,4 @@
+-h43453
++h39685
+ s 00005/00000/00497
+ d D 8.5 94/01/21 17:17:33 bostic 132 131
+ c add USL's copyright notice
+@@ -279,10 +279,6 @@
+ s 00000/00001/00320
+ d D 4.42 82/10/21 20:56:11 root 64 63
+ c lint
+-e
+-s 00000/00000/00321
+-d D 4.42 82/10/19 10:30:32  64 63
+-c more lint
+ e
+ s 00000/00000/00321
+ d D 4.41 82/10/17 21:48:24 root 63 62
+diff -uprw csrg-orig/sys/kern/SCCS/s.kern_physio.c csrg/sys/kern/SCCS/s.kern_physio.c
+--- csrg-orig/sys/kern/SCCS/s.kern_physio.c	Fri Jan 21 21:17:59 1994
++++ csrg/sys/kern/SCCS/s.kern_physio.c	Tue Jul 31 18:09:33 2012
+@@ -1,4 +1,4 @@
+-h22624
++h18844
+ s 00005/00000/00182
+ d D 8.4 94/01/21 17:17:40 bostic 97 96
+ c add USL's copyright notice
+@@ -203,10 +203,6 @@
+ s 00002/00002/00238
+ d D 4.34 82/10/21 21:00:49 root 47 46
+ c lint
+-e
+-s 00000/00000/00240
+-d D 4.34 82/10/19 10:34:19  47 46
+-c more lint
+ e
+ s 00000/00000/00240
+ d D 4.33 82/10/17 21:52:44 root 46 45
+diff -uprw csrg-orig/sys/kern/SCCS/s.kern_proc.c csrg/sys/kern/SCCS/s.kern_proc.c
+--- csrg-orig/sys/kern/SCCS/s.kern_proc.c	Tue Feb 14 14:27:42 1995
++++ csrg/sys/kern/SCCS/s.kern_proc.c	Tue Jul 31 18:11:47 2012
+@@ -1,4 +1,4 @@
+-h31788
++h27998
+ s 00002/00001/00346
+ d D 8.7 95/02/14 10:27:23 cgd 125 124
+ c new argument passing conventions.  minor type size cleanup.
+@@ -232,10 +232,6 @@
+ s 00004/00004/01044
+ d D 4.43 82/10/21 20:56:40 root 69 68
+ c lint
+-e
+-s 00000/00000/01048
+-d D 4.43 82/10/19 10:30:45  69 68
+-c more lint
+ e
+ s 00000/00000/01048
+ d D 4.42 82/10/17 23:03:17 root 68 67
+diff -uprw csrg-orig/sys/kern/SCCS/s.subr_xxx.c csrg/sys/kern/SCCS/s.subr_xxx.c
+--- csrg-orig/sys/kern/SCCS/s.subr_xxx.c	Wed Mar 29 03:29:14 1995
++++ csrg/sys/kern/SCCS/s.subr_xxx.c	Tue Jul 31 18:14:27 2012
+@@ -1,4 +1,4 @@
+-h60693
++h56930
+ s 00011/00000/00080
+ d D 8.3 95/03/29 00:28:57 mckusick 50 49
+ c add einval for invalid operations
+@@ -110,10 +110,6 @@
+ s 00001/00014/00170
+ d D 4.20 82/10/31 00:39:24 root 23 22
+ c bugs in #ifndef vax stuff (from 68k)
+-e
+-s 00000/00000/00184
+-d D 4.20 82/10/19 10:31:06  23 22
+-c more lint
+ e
+ s 00003/00002/00181
+ d D 4.19 82/10/17 21:49:40 root 22 21
+diff -uprw csrg-orig/sys/kern/SCCS/s.vfs_bio.c csrg/sys/kern/SCCS/s.vfs_bio.c
+--- csrg-orig/sys/kern/SCCS/s.vfs_bio.c	Mon Jan  9 22:22:44 1995
++++ csrg/sys/kern/SCCS/s.vfs_bio.c	Tue Jul 31 18:20:21 2012
+@@ -1,4 +1,4 @@
+-h02233
++h63985
+ s 00003/00000/00748
+ d D 8.11 95/01/09 18:22:23 cgd 155 154
+ c return types, 64-bit changes: ioctl cmd -> u_long, casts, etc.
+@@ -421,10 +421,6 @@
+ s 00179/00077/00511
+ d D 4.39 82/11/13 22:52:27 sam 53 52
+ c merge of 4.1b and 4.1c
+-e
+-s 00000/00000/00588
+-d D 4.39 82/10/19 10:32:02  53 52
+-c more lint
+ e
+ s 00000/00000/00588
+ d D 4.38 82/10/17 21:51:03 root 52 51
+diff -uprw csrg-orig/sys/kern/SCCS/s.vfs_cluster.c csrg/sys/kern/SCCS/s.vfs_cluster.c
+--- csrg-orig/sys/kern/SCCS/s.vfs_cluster.c	Wed Mar 29 02:29:05 1995
++++ csrg/sys/kern/SCCS/s.vfs_cluster.c	Tue Jul 31 18:21:17 2012
+@@ -1,4 +1,4 @@
+-h25410
++h21626
+ s 00001/00012/00729
+ d D 8.10 95/03/28 23:28:45 mckusick 154 153
+ c doreallocblks moves into ffs
+@@ -419,10 +419,6 @@
+ s 00179/00077/00511
+ d D 4.39 82/11/13 22:52:27 sam 53 52
+ c merge of 4.1b and 4.1c
+-e
+-s 00000/00000/00588
+-d D 4.39 82/10/19 10:32:02  53 52
+-c more lint
+ e
+ s 00000/00000/00588
+ d D 4.38 82/10/17 21:51:03 root 52 51
