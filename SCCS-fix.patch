@@ -118,3 +118,42 @@ diff -uprw csrg-orig/sys/kern/SCCS/s.vfs_cluster.c csrg/sys/kern/SCCS/s.vfs_clus
  e
  s 00000/00000/00588
  d D 4.38 82/10/17 21:51:03 root 52 51
+diff -uprw csrg-orig/usr.bin/pascal/src/SCCS/s.main.c csrg/usr.bin/pascal/src/SCCS/s.main.c
+--- csrg-orig/usr.bin/pascal/src/SCCS/s.main.c	Tue May 24 20:16:55 1994
++++ csrg/usr.bin/pascal/src/SCCS/s.main.c	Sat Oct 20 12:31:08 2012
+@@ -1,4 +1,4 @@
+-h56978
++h56914
+ s 00002/00002/00442
+ d D 8.2 94/05/24 17:16:37 mckusick 21 20
+ c type cast lseek calls
+@@ -80,7 +80,7 @@
+ d R 1.2 81/01/15 13:51:55 peter 2 1
+ c put in static copyright string.
+ e
+-s 00409/00000/000p0
++s 00409/00000/00000
+ d D 1.1 80/08/27 19:55:20 peter 1 0
+ c date and time created 80/08/27 19:55:20 by peter
+ e
+diff -uprw csrg-orig/usr.bin/pascal/pdx/machine/SCCS/s.printerror.c csrg/usr.bin/pascal/pdx/machine/SCCS/s.printerror.c
+--- csrg-orig/usr.bin/pascal/pdx/machine/SCCS/s.printerror.c	Sun Jun  6 18:39:20 1993
++++ csrg/usr.bin/pascal/pdx/machine/SCCS/s.printerror.c	Sat Oct 20 12:33:57 2012
+@@ -1,4 +1,4 @@
+-h20890
++h21178
+ s 00002/00002/00061
+ d D 8.1 93/06/06 15:39:03 bostic 7 6
+ c 4.4BSD snapshot (revision 8.1); add 1993 to copyright
+@@ -22,9 +22,9 @@
+ e
+ s 00001/00008/00051
+ d D 1.2 82/01/23 17:02:34 linton 2 1
+-c remove call to iîét() under option('r'), this is now in resume()
++c remove call to init() under option('r'), this is now in resume()
+ e
+-s 0009/00000/00000
++s 00059/00000/00000
+ d D 1.1 82/01/18 19:20:17 linton 1 0
+ c date and time created 82/01/18 19:20:17 by linton
+ e
