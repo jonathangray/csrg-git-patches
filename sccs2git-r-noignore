@@ -49,6 +49,14 @@ my $tzoffset = sub {
 	. sprintf "%.4d", abs $offset_s;
     };
 
+open(my $fh, '<', 'map') or die "could not open 'map' file";
+my %authors = ();
+while (<$fh>) {
+	if ($_ =~ m/([^ ]*) (.*) <.*$/) {
+		$authors{$1} = $2;
+	}
+}
+
 # Submit in the same sequence as the original
 my %sccs;
 my %file;
@@ -91,7 +99,12 @@ foreach my $c (sort keys %sccs) {
 	$stamp, $delta{date}, $delta{"time"};
 
     print { $gfi } "commit ", $branchname, "\n";
-    print { $gfi } "committer ", $delta{committer}, " <",
+
+    my $realname = $delta{committer};
+    if (defined($authors{$delta{committer}})) {
+        $realname = $authors{$delta{committer}};
+    }
+    print { $gfi } "committer ", $realname, " <",
 	    ($delta{committer}, "@", $domain, "> ", $delta{stamp} + 64800,
 	     " ", $tzoffset->($delta{stamp}), "\n");
 
