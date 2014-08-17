@@ -40,13 +40,18 @@ my $mark;
 
 # use a best guess at user, hostname, etc.  FIXME: add authors map :)
 use Time::Local;
+use Net::Domain;
 my $domain = "ucbvax.Berkeley.EDU";
 my %tzoffset;
 my $tzoffset = sub {
+    use integer;
     my $offset_s = timegm (localtime ($_[0])) - $_[0];
-    $offset_s = 0 - 800;
+    # hard code -800
+    $offset_s = -28800;
+    my $off = abs $offset_s / 60;
+    my ($off_h, $off_m) = ($off / 60, $off % 60);
     $tzoffset{$offset_s} ||= ( $offset_s >= 0 ? "+" : "-" )
-	. sprintf "%.4d", abs $offset_s;
+	. sprintf "%02d%02d", $off_h, $off_m;
     };
 
 open(my $fh, '<', 'map') or die "could not open 'map' file";
@@ -82,7 +87,8 @@ foreach my $f (sort @sccs) {
 	print { $gfi } "blob\nmark :", $mark,
 			   "\ndata ", length ($data),
 			   "\n", $data, "\n";
-	printf STDERR "%-20s %3d %8s  %s\r", $fn, $rev, $vsn, pr_date ($delta->{stamp});
+	printf STDERR "%-20s %3d %8s  %s\r", $fn, $rev, $vsn,
+	    pr_date ($delta->{stamp});
 	}
     print STDERR "\n";
     }
@@ -98,15 +104,15 @@ foreach my $c (sort keys %sccs) {
     printf STDERR "%-20s %3d %6s  %s %s %s\n", $fn, $rev, $vsn,
 	$stamp, $delta{date}, $delta{"time"};
 
-    print { $gfi } "commit ", $branchname, "\n";
-
     my $realname = $delta{committer};
     if (defined($authors{$delta{committer}})) {
         $realname = $authors{$delta{committer}};
     }
-    print { $gfi } "committer ", $realname, " <",
-	    ($delta{committer}, "@", $domain, "> ", $delta{stamp} + 64800,
-	     " ", $tzoffset->($delta{stamp}), "\n");
+
+    print { $gfi } "commit ", $branchname, "\n";
+    print { $gfi } "committer ", $realname,
+	" <", $delta{committer}, "> ",
+	$delta{stamp} + 64800, " ", $tzoffset->($delta{stamp}), "\n";
 
     # tradition is to save all potentially useful but
     # uncategorized metadata as RFC822-style headers in the commit
@@ -132,41 +138,6 @@ close $gfi;
 
 system "git", "checkout";
 system "git", "reset", "--hard";
-
-open my $gi, ">", ".gitignore";
-print $gi <<EOG;
-SCCS
-core
-old
-save
-*.log
-*.out
-*.sv
-*.t[gb]z
-*.zip
-EOG
-
-exists $sccs_ext{as} and print $gi <<EOG;
-*.[af]o
-*.[af]q
-*.al
-*.bk
-*.fa
-*.hz
-EOG
-
-exists $sccs_ext{c}  and print $gi <<EOG;
-*.[oa]
-a.out
-EOG
-
-exists $sccs_ext{ic} and print $gi <<EOG;
-*.ec
-*.u
-udir
-EOG
-
-close $gi;
 
 @fail and print STDERR join "\n    ",
     "The following files could not be converted and were skipped:", @fail, "\r";

@@ -1,37 +1,98 @@
---- sccs2git-r	Mon Jun  2 19:52:49 2008
-+++ sccs2git-r-noignore	Mon Aug 27 17:15:05 2012
+--- sccs2git-r	Sun Aug 17 22:53:41 2014
++++ sccs2git-r-noignore	Mon Aug 18 01:23:32 2014
 @@ -1,4 +1,4 @@
 -#!/pro/bin/perl
 +#!/usr/bin/perl
  
  # This is the recursive version of sccs2git
  # Combining all SCCS repos to one single git repo
-@@ -40,10 +40,11 @@ my $mark;
- 
+@@ -41,17 +41,27 @@ my $mark;
  # use a best guess at user, hostname, etc.  FIXME: add authors map :)
  use Time::Local;
--my $domain = "procura.nl";
+ use Net::Domain;
+-my $domain = Net::Domain::hostdomain () || "procura.nl";
 +my $domain = "ucbvax.Berkeley.EDU";
  my %tzoffset;
  my $tzoffset = sub {
+     use integer;
      my $offset_s = timegm (localtime ($_[0])) - $_[0];
-+    $offset_s = 0 - 800;
++    # hard code -800
++    $offset_s = -28800;
+     my $off = abs $offset_s / 60;
+     my ($off_h, $off_m) = ($off / 60, $off % 60);
      $tzoffset{$offset_s} ||= ( $offset_s >= 0 ? "+" : "-" )
- 	. sprintf "%.4d", abs $offset_s;
+ 	. sprintf "%02d%02d", $off_h, $off_m;
      };
-@@ -91,7 +92,7 @@ foreach my $c (sort keys %sccs) {
  
++open(my $fh, '<', 'map') or die "could not open 'map' file";
++my %authors = ();
++while (<$fh>) {
++	if ($_ =~ m/([^ ]*) (.*) <.*$/) {
++		$authors{$1} = $2;
++	}
++}
++
+ # Submit in the same sequence as the original
+ my %sccs;
+ my %file;
+@@ -94,10 +104,15 @@ foreach my $c (sort keys %sccs) {
+     printf STDERR "%-20s %3d %6s  %s %s %s\n", $fn, $rev, $vsn,
+ 	$stamp, $delta{date}, $delta{"time"};
+ 
++    my $realname = $delta{committer};
++    if (defined($authors{$delta{committer}})) {
++        $realname = $authors{$delta{committer}};
++    }
++
      print { $gfi } "commit ", $branchname, "\n";
-     print { $gfi } "committer ", $delta{committer}, " <",
--	    ($delta{committer}, "@", $domain, "> ", $delta{stamp},
-+	    ($delta{committer}, "@", $domain, "> ", $delta{stamp} + 64800,
- 	     " ", $tzoffset->($delta{stamp}), "\n");
+-    print { $gfi } "committer ", $delta{committer},
+-	" <", $delta{committer}, "@", $domain, "> ",
+-	$delta{stamp}, " ", $tzoffset->($delta{stamp}), "\n";
++    print { $gfi } "committer ", $realname,
++	" <", $delta{committer}, "> ",
++	$delta{stamp} + 64800, " ", $tzoffset->($delta{stamp}), "\n";
  
      # tradition is to save all potentially useful but
-@@ -153,9 +154,6 @@ udir
- EOG
+     # uncategorized metadata as RFC822-style headers in the commit
+@@ -123,44 +138,6 @@ close $gfi;
  
- close $gi;
+ system "git", "checkout";
+ system "git", "reset", "--hard";
+-
+-open my $gi, ">", ".gitignore";
+-print $gi <<EOG;
+-SCCS
+-core
+-old
+-save
+-*.log
+-*.out
+-*.sv
+-*.t[gb]z
+-*.zip
+-EOG
+-
+-exists $sccs_ext{as} and print $gi <<EOG;
+-*.[af]o
+-*.[af]q
+-*.al
+-*.bk
+-*.fa
+-*.hz
+-EOG
+-
+-exists $sccs_ext{c}  and print $gi <<EOG;
+-*.[oa]
+-a.out
+-EOG
+-
+-exists $sccs_ext{ic} and print $gi <<EOG;
+-*.ec
+-*.u
+-udir
+-EOG
+-
+-close $gi;
 -
 -system "git", "add", ".gitignore";
 -system "git", "commit", "-m", "Add default ignore list";

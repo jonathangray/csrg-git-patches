@@ -4,16 +4,23 @@ to a git repo for ease of browsing.
 - Obtain CSRG Archive CD set from http://www.mckusick.com/csrg/
 - Install VCS-SCCS from CPAN (http://search.cpan.org/dist/VCS-SCCS/)
 - apply SCCS-fix.patch to SCCS tree copied off CD 4
+- from the top level of the SCCS tree
+rm -f local/ditroff/ditroff.old.okeeffe/driver/SCCS/s.ifontinfo.c-bad
+rm -f old/adb/adb.vax/SCCS/s.expr.c.bad
+rm -f usr.bin/passwd/SCCS/s.passwd.c.bad
+rm -f sys/vax/uba/SCCS/S.ik.c.corrupted
+rm -f sys/kern/SCCS/s.subr_rmap.c.sav
 - run sccs2git-r-noignore from the top level of the sccs tree
 
-sccs2git-r-noignore is one of the examples from VCS-SCCS-0.20
+sccs2git-r-noignore is one of the examples from VCS-SCCS-0.22
 - modified so the timestamps match the sccs logs
 - modified to not create a .gitignore
 - modified to have a default domain of ucbvax.Berkeley.EDU
+- modified to use the 'map' file
 it has the same license as the rest of VCS-SCCS:
 
 COPYRIGHT AND LICENSE
-    Copyright (C) 2007-2011 H.Merijn Brand
+    Copyright (C) 2007-2014 H.Merijn Brand
 
     This library is free software; you can redistribute it and/or modify
     it under the same terms as Perl itself. 
