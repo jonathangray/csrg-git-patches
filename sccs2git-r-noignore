@@ -42,12 +42,12 @@ my $mark;
 use Time::Local;
 use Net::Domain;
 my $domain = "ucbvax.Berkeley.EDU";
+$ENV{TZ} = "US/Pacific";
+POSIX::tzset();
 my %tzoffset;
 my $tzoffset = sub {
     use integer;
     my $offset_s = timegm (localtime ($_[0])) - $_[0];
-    # hard code -800
-    $offset_s = -28800;
     my $off = abs $offset_s / 60;
     my ($off_h, $off_m) = ($off / 60, $off % 60);
     $tzoffset{$offset_s} ||= ( $offset_s >= 0 ? "+" : "-" )
@@ -112,7 +112,7 @@ foreach my $c (sort keys %sccs) {
     print { $gfi } "commit ", $branchname, "\n";
     print { $gfi } "committer ", $realname,
 	" <", $delta{committer}, "> ",
-	$delta{stamp} + 64800, " ", $tzoffset->($delta{stamp}), "\n";
+	$delta{stamp}, " ", $tzoffset->($delta{stamp}), "\n";
 
     # tradition is to save all potentially useful but
     # uncategorized metadata as RFC822-style headers in the commit
