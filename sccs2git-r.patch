@@ -1,26 +1,23 @@
 --- sccs2git-r	Sun Aug 17 22:53:41 2014
-+++ sccs2git-r-noignore	Mon Aug 18 01:23:32 2014
++++ sccs2git-r-noignore	Mon Aug 18 16:38:33 2014
 @@ -1,4 +1,4 @@
 -#!/pro/bin/perl
 +#!/usr/bin/perl
  
  # This is the recursive version of sccs2git
  # Combining all SCCS repos to one single git repo
-@@ -41,17 +41,27 @@ my $mark;
+@@ -41,7 +41,9 @@ my $mark;
  # use a best guess at user, hostname, etc.  FIXME: add authors map :)
  use Time::Local;
  use Net::Domain;
 -my $domain = Net::Domain::hostdomain () || "procura.nl";
 +my $domain = "ucbvax.Berkeley.EDU";
++$ENV{TZ} = "US/Pacific";
++POSIX::tzset();
  my %tzoffset;
  my $tzoffset = sub {
      use integer;
-     my $offset_s = timegm (localtime ($_[0])) - $_[0];
-+    # hard code -800
-+    $offset_s = -28800;
-     my $off = abs $offset_s / 60;
-     my ($off_h, $off_m) = ($off / 60, $off % 60);
-     $tzoffset{$offset_s} ||= ( $offset_s >= 0 ? "+" : "-" )
+@@ -52,6 +54,14 @@ my $tzoffset = sub {
  	. sprintf "%02d%02d", $off_h, $off_m;
      };
  
@@ -35,7 +32,7 @@
  # Submit in the same sequence as the original
  my %sccs;
  my %file;
-@@ -94,10 +104,15 @@ foreach my $c (sort keys %sccs) {
+@@ -94,9 +104,24 @@ foreach my $c (sort keys %sccs) {
      printf STDERR "%-20s %3d %6s  %s %s %s\n", $fn, $rev, $vsn,
  	$stamp, $delta{date}, $delta{"time"};
  
@@ -43,18 +40,26 @@
 +    if (defined($authors{$delta{committer}})) {
 +        $realname = $authors{$delta{committer}};
 +    }
++    # bill joy's last commit Wed Dec 10 20:01:30 1980 -0800
++    # bill jolitz's first commit Mon Mar 12 15:47:40 1990 -0800
++    if ($delta{committer} eq "bill") {
++        my @dt = localtime($delta{stamp});
++        if ($dt[5] < 85) {
++            $realname = $authors{wnj};
++        } else {
++            $realname = $authors{william};
++        }  
++    }
 +
      print { $gfi } "commit ", $branchname, "\n";
 -    print { $gfi } "committer ", $delta{committer},
 -	" <", $delta{committer}, "@", $domain, "> ",
--	$delta{stamp}, " ", $tzoffset->($delta{stamp}), "\n";
 +    print { $gfi } "committer ", $realname,
 +	" <", $delta{committer}, "> ",
-+	$delta{stamp} + 64800, " ", $tzoffset->($delta{stamp}), "\n";
+ 	$delta{stamp}, " ", $tzoffset->($delta{stamp}), "\n";
  
      # tradition is to save all potentially useful but
-     # uncategorized metadata as RFC822-style headers in the commit
-@@ -123,44 +138,6 @@ close $gfi;
+@@ -123,44 +148,6 @@ close $gfi;
  
  system "git", "checkout";
  system "git", "reset", "--hard";

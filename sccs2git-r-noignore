@@ -108,6 +108,16 @@ foreach my $c (sort keys %sccs) {
     if (defined($authors{$delta{committer}})) {
         $realname = $authors{$delta{committer}};
     }
+    # bill joy's last commit Wed Dec 10 20:01:30 1980 -0800
+    # bill jolitz's first commit Mon Mar 12 15:47:40 1990 -0800
+    if ($delta{committer} eq "bill") {
+        my @dt = localtime($delta{stamp});
+        if ($dt[5] < 85) {
+            $realname = $authors{wnj};
+        } else {
+            $realname = $authors{william};
+        }  
+    }
 
     print { $gfi } "commit ", $branchname, "\n";
     print { $gfi } "committer ", $realname,
