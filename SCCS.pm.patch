@@ -1,0 +1,112 @@
+--- SCCS.pm.orig	Mon Aug 18 17:05:21 2014
++++ SCCS.pm	Mon Aug 18 18:38:19 2014
+@@ -299,10 +299,15 @@ sub _tran
+     my $tt = $self->{tran} or return $line;
+     my $tr = $tran{$tt}    or return $line;
+     my $re = $tr->{re};
++    if ($re =~ /include/) {
++        $line =~ s/^.*(%sccs\.include\..*%).*$/$1/;
++    }
+     $line =~ s{($re)}{$tr->{$1}}g;
+     return $line;
+     } # _tran
+ 
++use File::Slurp;
++
+ sub translate
+ {
+     my ($self, $rev, $line) = @_;
+@@ -335,6 +340,93 @@ sub translate
+     $tran{SCCS}{"%A%"} = "$Z$Y $M $I$Z";
+     $tran{SCCS}{"%Q%"} = $Q;
+     $tran{SCCS}{"%Y%"} = $Y;
++    my $inc_prop_c = read_file('copyright/includes/proprietary.c');
++    chomp ($inc_prop_c);
++    $tran{SCCS}{"%sccs.include.proprietary.c%"} = $inc_prop_c;
++
++    my $inc_prop_f = read_file('copyright/includes/proprietary.f');
++    chomp ($inc_prop_f);
++    $tran{SCCS}{"%sccs.include.proprietary.f%"} = $inc_prop_f;
++
++    my $inc_prop_man = read_file('copyright/includes/proprietary.man');
++    chomp ($inc_prop_man);
++    $tran{SCCS}{"%sccs.include.proprietary.man%"} = $inc_prop_man;
++
++    my $inc_prop_roff = read_file('copyright/includes/proprietary.roff');
++    chomp ($inc_prop_roff);
++    $tran{SCCS}{"%sccs.include.proprietary.roff%"} = $inc_prop_roff;
++
++    my $inc_prop_sh = read_file('copyright/includes/proprietary.sh');
++    chomp ($inc_prop_sh);
++    $tran{SCCS}{"%sccs.include.proprietary.sh%"} = $inc_prop_sh;
++
++    my $inc_redist_c = read_file('copyright/includes/redist.c');
++    chomp ($inc_redist_c);
++    $tran{SCCS}{"%sccs.include.redist.c%"} = $inc_redist_c;
++
++    my $inc_redist_gas = read_file('copyright/includes/redist.gas');
++    chomp ($inc_redist_gas);
++    $tran{SCCS}{"%sccs.include.redist.gas%"} = $inc_redist_gas;
++
++    my $inc_redist_man = read_file('copyright/includes/redist.man');
++    chomp ($inc_redist_man);
++    $tran{SCCS}{"%sccs.include.redist.man%"} = $inc_redist_man;
++
++    my $inc_redist_roff = read_file('copyright/includes/redist.roff');
++    chomp ($inc_redist_roff);
++    $tran{SCCS}{"%sccs.include.redist.roff%"} = $inc_redist_roff;
++
++    my $inc_redist_semi = read_file('copyright/includes/redist.semicolon');
++    chomp ($inc_redist_semi);
++    $tran{SCCS}{"%sccs.include.redist.semicolon%"} = $inc_redist_semi;
++
++    my $inc_redist_sh = read_file('copyright/includes/redist.sh');
++    chomp ($inc_redist_sh);
++    $tran{SCCS}{"%sccs.include.redist.sh%"} = $inc_redist_sh;
++
++    my $inc_redist_tex = read_file('copyright/includes/redist.tex');
++    chomp ($inc_redist_tex);
++    $tran{SCCS}{"%sccs.include.redist.tex%"} = $inc_redist_tex;
++
++    my $inc_redist_texinfo = read_file('copyright/includes/redist.texinfo');
++    chomp ($inc_redist_texinfo);
++    $tran{SCCS}{"%sccs.include.redist.texinfo%"} = $inc_redist_texinfo;
++
++    my $inc_386_c = read_file('copyright/includes/386.c');
++    chomp ($inc_386_c);
++    $tran{SCCS}{"%sccs.include.386.c%"} = $inc_386_c;
++
++    my $inc_att_c = read_file('copyright/includes/ATT.c');
++    chomp ($inc_att_c);
++    $tran{SCCS}{"%sccs.include.ATT.c%"} = $inc_att_c;
++
++    my $inc_att_man = read_file('copyright/includes/ATT.man');
++    chomp ($inc_att_man);
++    $tran{SCCS}{"%sccs.include.ATT.man%"} = $inc_att_man;
++
++    my $inc_att_roff = read_file('copyright/includes/ATT.roff');
++    chomp ($inc_att_roff);
++    $tran{SCCS}{"%sccs.include.ATT.roff%"} = $inc_att_roff;
++
++    my $inc_att_sh = read_file('copyright/includes/ATT.sh');
++    chomp ($inc_att_sh);
++    $tran{SCCS}{"%sccs.include.ATT.sh%"} = $inc_att_sh;
++
++    my $inc_shared_c = read_file('copyright/includes/SHARED.c');
++    chomp ($inc_shared_c);
++    $tran{SCCS}{"%sccs.include.SHARED.c%"} = $inc_shared_c;
++
++    my $inc_shared_man = read_file('copyright/includes/SHARED.man');
++    chomp ($inc_shared_man);
++    $tran{SCCS}{"%sccs.include.SHARED.man%"} = $inc_shared_man;
++
++    my $inc_shared_roff = read_file('copyright/includes/SHARED.roff');
++    chomp ($inc_shared_roff);
++    $tran{SCCS}{"%sccs.include.SHARED.roff%"} = $inc_shared_roff;
++
++    my $inc_shared_sh = read_file('copyright/includes/SHARED.sh');
++    chomp ($inc_shared_sh);
++    $tran{SCCS}{"%sccs.include.SHARED.sh%"} = $inc_shared_sh;
+ 
+     unless (exists $tran{$type}{re}) {
+ 	my $kw = join "|", reverse sort keys %{$tran{$type}};

@@ -1,0 +1,3 @@
+# This module is believed to contain source code proprietary to AT&T.
+# The Berkeley Software License Agreement specifies the terms and
+# conditions for redistribution.
