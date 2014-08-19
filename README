@@ -1,6 +1,16 @@
 This is a bunch of notes and patches on converting the CSRG SCCS
 to a git repo for ease of browsing.
 
+VCS::SCCS does not currently try to group commits with the same
+message in a similiar timeframe into one commit spanning
+multiple files.  It has to be patched to handle %G% and
+%sccs.include.filename%, both of which are heavily used in
+the CSRG SCCS.
+
+There seem to be a few cases of multiple usernames for one person
+and 'bill' seems to be either Bill Joy or Bill Jolitz depending
+on the time of the commit.
+
 - Obtain CSRG Archive CD set from http://www.mckusick.com/csrg/
 - Install VCS-SCCS from CPAN (http://search.cpan.org/dist/VCS-SCCS/)
 - apply SCCS-fix.patch to SCCS tree copied off CD 4
@@ -10,14 +20,15 @@ rm -f old/adb/adb.vax/SCCS/s.expr.c.bad
 rm -f usr.bin/passwd/SCCS/s.passwd.c.bad
 rm -f sys/vax/uba/SCCS/S.ik.c.corrupted
 rm -f sys/kern/SCCS/s.subr_rmap.c.sav
+- copy 'map' and the 'copyright' to the top level SCCS dir
 - run sccs2git-r-noignore from the top level of the sccs tree
 
-sccs2git-r-noignore is one of the examples from VCS-SCCS-0.22
+sccs2git-r-noignore is one of the examples from VCS::SCCS 0.22
 - modified so the timestamps match the sccs logs
 - modified to not create a .gitignore
-- modified to have a default domain of ucbvax.Berkeley.EDU
-- modified to use the 'map' file
-it has the same license as the rest of VCS-SCCS:
+- modified to use the 'map' file that attempts to map logins to names
+- timezone changed to US/Pacific instead of local timezone
+it has the same license as the rest of VCS::SCCS
 
 COPYRIGHT AND LICENSE
     Copyright (C) 2007-2014 H.Merijn Brand
